@@ -3,26 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Base64 Encoding – Step by Step</title>
-  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <title>Base64 Encoding Visualizer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
+    /* ── Palette ── */
     :root {
-      --bg:        #f7f4ef;
-      --bg2:       #ede9e2;
-      --surface:   #ffffff;
-      --border:    #ddd9d0;
-      --text:      #2c2820;
-      --muted:     #9c9385;
-      --accent:    #b85c38;
-      --accent2:   #4a7c6f;
-      --step-bg:   #faf8f5;
-      --num-bg:    #b85c38;
-      --num-text:  #ffffff;
-      --out-text:  #2f5f55;
-      --serif:     'Lora', Georgia, serif;
-      --mono:      'Fira Code', 'Courier New', monospace;
-      --radius:    14px;
-      --shadow:    0 2px 16px rgba(44,40,32,0.07);
+      --bg:          #fdfcfa;
+      --cream:       #f7f2ea;
+      --peach:       #fdeee4;
+      --peach-dk:    #f5d5be;
+      --surface:     #ffffff;
+      --border:      #e8e0d4;
+      --border-dk:   #d4c8b8;
+      --text:        #1c1714;
+      --text-2:      #4a4038;
+      --muted:       #9a8f84;
+      --accent:      #c97b4b;          /* warm amber/terracotta */
+      --accent-lt:   #fdf0e8;
+      --pad-color:   #9b3a22;
+      --pad-bg:      #fdecea;
+      --sans:        'Nunito', 'Segoe UI', sans-serif;
+      --mono:        'JetBrains Mono', 'Courier New', monospace;
+      --radius:      14px;
+      --shadow:      0 1px 10px rgba(28,23,20,0.07);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -30,359 +34,750 @@
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: var(--serif);
+      font-family: var(--sans);
       min-height: 100vh;
-      padding-bottom: 80px;
+      padding-bottom: 110px;
     }
 
-    /* subtle linen texture */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='%23f7f4ef'/%3E%3Crect x='0' y='0' width='1' height='1' fill='%23e8e3da' opacity='0.4'/%3E%3Crect x='2' y='2' width='1' height='1' fill='%23e8e3da' opacity='0.3'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* ── Hero ── */
+    /* ══════════════════════════════════
+       HERO
+    ══════════════════════════════════ */
     .hero {
       text-align: center;
-      padding: 72px 24px 52px;
-      position: relative;
-      z-index: 1;
+      padding: 60px 24px 44px;
+      border-bottom: 1px solid var(--border);
+      background: var(--cream);
     }
     .hero-eyebrow {
       font-family: var(--mono);
-      font-size: 0.72rem;
-      letter-spacing: 0.25em;
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
       text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
     .hero h1 {
-      font-family: var(--serif);
-      font-size: clamp(2.6rem, 6vw, 4rem);
-      font-weight: 600;
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 700;
       color: var(--text);
-      line-height: 1.15;
-      letter-spacing: -0.02em;
+      line-height: 1.12;
+      letter-spacing: -0.025em;
     }
-    .hero h1 em {
-      font-style: italic;
-      color: var(--accent);
-    }
+    .hero h1 em { font-style: normal; color: var(--accent); }
     .hero-sub {
-      margin-top: 12px;
-      font-size: 1rem;
-      font-style: italic;
+      margin-top: 10px;
+      font-size: 0.95rem;
+      font-weight: 300;
       color: var(--muted);
-      letter-spacing: 0.01em;
+      letter-spacing: 0.06em;
     }
-    .hero-rule {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 36px;
+    .hero-ornament {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      margin-top: 28px;
     }
-    .hero-rule::before, .hero-rule::after {
-      content: '';
-      width: 48px; height: 1px;
-      background: var(--border);
+    .hero-ornament::before, .hero-ornament::after {
+      content: ''; width: 44px; height: 1px; background: var(--border-dk);
     }
-    .hero-rule span {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
+    .hero-ornament span {
+      width: 5px; height: 5px; border-radius: 50%; background: var(--accent);
     }
 
-    /* ── Layout ── */
-    .container {
-      max-width: 780px;
-      margin: 0 auto;
-      padding: 0 24px;
-      position: relative;
-      z-index: 1;
-    }
+    /* ══════════════════════════════════
+       LAYOUT
+    ══════════════════════════════════ */
+    .container { max-width: 780px; margin: 0 auto; padding: 32px 24px 0; }
 
-    /* ── Step card ── */
+    /* ══════════════════════════════════
+       STEP CARDS
+    ══════════════════════════════════ */
     .step {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       overflow: hidden;
-      transition: box-shadow 0.25s, border-color 0.25s;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
     .step:focus-within {
-      box-shadow: 0 4px 24px rgba(184,92,56,0.12);
-      border-color: #c8876a;
+      border-color: var(--accent);
+      box-shadow: 0 3px 18px rgba(201,123,75,0.14);
     }
-
     .step-header {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      padding: 16px 20px 14px;
-      background: var(--step-bg);
+      display: flex; align-items: center; gap: 12px;
+      padding: 13px 18px;
+      background: var(--cream);
       border-bottom: 1px solid var(--border);
     }
     .step-num {
-      width: 30px; height: 30px;
-      border-radius: 50%;
-      background: var(--num-bg);
-      color: var(--num-text);
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      font-weight: 500;
+      width: 26px; height: 26px; border-radius: 7px;
+      background: var(--text); color: #fff;
+      font-family: var(--mono); font-size: 0.68rem; font-weight: 500;
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
-      margin-top: 1px;
     }
-    .step-meta { flex: 1; }
-    .step-title {
-      font-family: var(--serif);
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--text);
-      line-height: 1.3;
-    }
-    .step-desc {
-      margin-top: 3px;
+    .step-meta { flex: 1; min-width: 0; }
+    .step-title { font-size: 0.92rem; font-weight: 700; color: var(--text); }
+    .step-desc  {
+      font-size: 0.68rem; color: var(--muted); margin-top: 2px;
       font-family: var(--mono);
-      font-size: 0.68rem;
-      color: var(--muted);
-      letter-spacing: 0.02em;
     }
 
-    /* ── Fields ── */
+    /* ── Field row ── */
     .field-wrap {
-      padding: 14px 20px 16px;
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 12px 16px 14px;
     }
-    textarea {
+
+    textarea#input {
+      flex: 1; background: transparent; border: none; outline: none;
+      font-family: var(--sans); font-size: 1rem; font-weight: 600;
+      color: var(--text); resize: none; line-height: 1.7;
+      caret-color: var(--accent); overflow: hidden; min-height: 40px;
+    }
+    textarea#input::placeholder { color: var(--border-dk); font-weight: 400; }
+
+    .out-text {
+      flex: 1; font-family: var(--mono); font-size: 0.86rem;
+      color: var(--text-2); line-height: 1.9; word-break: break-all;
+      min-height: 36px; user-select: text;
+    }
+    .out-text:empty::before { content: '—'; color: var(--border-dk); font-style: italic; }
+
+    .pad-zero {
+      color: var(--pad-color); background: var(--pad-bg);
+      border-radius: 3px; padding: 0 2px; font-weight: 500;
+    }
+
+    .step--final .out-text {
+      color: var(--text); font-weight: 700; font-size: 0.95rem;
+    }
+
+    /* ── Copy btn ── */
+    .btn-copy {
+      flex-shrink: 0; margin-top: 3px;
+      background: var(--cream); border: 1px solid var(--border-dk);
+      border-radius: 7px; padding: 4px 10px;
+      font-family: var(--mono); font-size: 0.66rem; color: var(--text-2);
+      cursor: pointer; display: flex; align-items: center; gap: 5px;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      white-space: nowrap; user-select: none;
+    }
+    .btn-copy:hover { background: var(--text); color: #fff; border-color: var(--text); }
+    .btn-copy.copied { background: var(--peach); color: var(--accent); border-color: var(--peach-dk); }
+    .btn-copy svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+    /* ══════════════════════════════════
+       BOTTOM BAR
+    ══════════════════════════════════ */
+    .bottom-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 32px;
+      background: rgba(253,252,250,0.92);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid var(--border);
+      z-index: 100;
+    }
+    .bar-btn {
+      display: flex; align-items: center; gap: 7px;
+      border: 1px solid transparent; border-radius: 10px;
+      padding: 8px 20px;
+      font-family: var(--sans); font-size: 0.84rem; font-weight: 700;
+      cursor: pointer; transition: all 0.15s; user-select: none;
+    }
+    .bar-btn:active { transform: scale(0.97); }
+    .bar-btn svg { width: 15px; height: 15px; }
+
+    .btn-clear {
+      background: var(--cream); color: var(--text-2); border-color: var(--border-dk);
+    }
+    .btn-clear:hover { background: var(--text); color: #fff; border-color: var(--text); }
+
+    .btn-share {
+      background: var(--text); color: #fff; border-color: var(--text);
+    }
+    .btn-share:hover { background: var(--accent); border-color: var(--accent); }
+
+    /* ══════════════════════════════════
+       TOAST
+    ══════════════════════════════════ */
+    .toast {
+      position: fixed; bottom: 74px; left: 50%;
+      transform: translateX(-50%) translateY(8px);
+      background: var(--text); color: #fff;
+      font-family: var(--sans); font-size: 0.78rem; font-weight: 600;
+      border-radius: 20px; padding: 7px 18px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s;
+      white-space: nowrap; z-index: 300;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ══════════════════════════════════
+       SHARE MODAL OVERLAY
+    ══════════════════════════════════ */
+    .share-overlay {
+      position: fixed; inset: 0;
+      background: rgba(28,23,20,0.55);
+      backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 400; padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.25s;
+    }
+    .share-overlay.open { opacity: 1; pointer-events: all; }
+
+    /* inner wrapper: the card + download btn below it */
+    .share-modal-wrap {
+      display: flex; flex-direction: column; align-items: center; gap: 14px;
+      max-width: 600px; width: 100%;
+    }
+
+    /* ── The card that gets screenshot ── */
+    #share-card {
       width: 100%;
-      background: transparent;
-      border: none;
-      outline: none;
-      font-family: var(--mono);
-      font-size: 0.9rem;
-      color: var(--text);
-      resize: none;
-      line-height: 1.8;
-      caret-color: var(--accent);
+      background: #ffffff;
+      border-radius: 18px;
       overflow: hidden;
-    }
-    textarea::placeholder {
-      color: var(--border);
-      font-style: italic;
-    }
-    textarea[readonly] {
-      color: var(--out-text);
+      box-shadow: 0 8px 40px rgba(28,23,20,0.22);
+      font-family: 'Nunito', sans-serif;
     }
 
-    /* final output */
-    .step--final textarea[readonly] {
-      color: var(--accent);
-      font-weight: 500;
-      font-size: 1rem;
+    /* card header */
+    .sc-header {
+      background: var(--cream);
+      padding: 22px 24px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sc-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem; letter-spacing: 0.28em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 6px;
+    }
+    .sc-title {
+      font-size: 1.3rem; font-weight: 700;
+      color: var(--text); line-height: 1.2;
+    }
+    .sc-title em { font-style: normal; color: var(--accent); }
+    .sc-subtitle {
+      font-size: 0.75rem; color: var(--muted);
+      font-weight: 300; margin-top: 3px;
     }
 
-    /* ── Footer ── */
-    .footnote {
-      text-align: center;
-      margin-top: 48px;
-      font-family: var(--mono);
-      font-size: 0.67rem;
-      color: var(--muted);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
+    /* card body — the rows */
+    .sc-body { padding: 16px 24px 0; }
+    .sc-row {
+      display: flex; align-items: baseline; gap: 10px;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--border);
     }
-    .footnote span { color: var(--accent); }
+    .sc-row:last-child { border-bottom: none; }
+    .sc-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem; font-weight: 500;
+      color: var(--muted); text-transform: uppercase;
+      letter-spacing: 0.08em; min-width: 110px; flex-shrink: 0;
+    }
+    .sc-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; color: var(--text-2);
+      word-break: break-all; line-height: 1.65;
+      flex: 1;
+    }
+    .sc-row--final .sc-value {
+      font-size: 0.9rem; font-weight: 700; color: var(--text);
+    }
+    .sc-pad-zero {
+      color: var(--pad-color); background: var(--pad-bg);
+      border-radius: 3px; padding: 0 2px;
+    }
 
-    /* ── Fade-in animation ── */
+    /* card footer */
+    .sc-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 24px 18px;
+      background: var(--peach);
+    }
+    .sc-watermark {
+      font-size: 0.7rem; font-weight: 600; color: var(--accent);
+      letter-spacing: 0.04em;
+    }
+    .sc-watermark span { color: var(--muted); font-weight: 400; }
+    .sc-try-btn {
+      background: var(--text); color: #fff;
+      border: none; border-radius: 8px;
+      padding: 7px 16px;
+      font-family: 'Nunito', sans-serif; font-size: 0.78rem; font-weight: 700;
+      cursor: pointer; letter-spacing: 0.02em;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .sc-try-btn svg { width: 13px; height: 13px; }
+
+    /* modal action row */
+    .share-actions {
+      display: flex; gap: 10px; width: 100%; justify-content: flex-end;
+    }
+    .modal-btn {
+      display: flex; align-items: center; gap: 6px;
+      border: none; border-radius: 9px; padding: 9px 18px;
+      font-family: var(--sans); font-size: 0.82rem; font-weight: 700;
+      cursor: pointer; transition: all 0.15s;
+    }
+    .modal-btn svg { width: 15px; height: 15px; }
+    .modal-btn--close {
+      background: rgba(255,255,255,0.85); color: var(--text-2);
+      border: 1px solid var(--border-dk);
+    }
+    .modal-btn--close:hover { background: var(--text); color: #fff; }
+    .modal-btn--download {
+      background: var(--text); color: #fff;
+    }
+    .modal-btn--download:hover { background: var(--accent); }
+
+    /* ── Animations ── */
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(14px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from { opacity:0; transform: translateY(10px); }
+      to   { opacity:1; transform: translateY(0); }
     }
-    .hero    { animation: fadeUp 0.5s ease both; }
-    .step:nth-child(1) { animation: fadeUp 0.5s 0.05s ease both; }
-    .step:nth-child(2) { animation: fadeUp 0.5s 0.10s ease both; }
-    .step:nth-child(3) { animation: fadeUp 0.5s 0.15s ease both; }
-    .step:nth-child(4) { animation: fadeUp 0.5s 0.20s ease both; }
-    .step:nth-child(5) { animation: fadeUp 0.5s 0.25s ease both; }
-    .step:nth-child(6) { animation: fadeUp 0.5s 0.30s ease both; }
-    .step:nth-child(7) { animation: fadeUp 0.5s 0.35s ease both; }
-    .step:nth-child(8) { animation: fadeUp 0.5s 0.40s ease both; }
+    .hero  { animation: fadeUp 0.4s ease both; }
+    .step:nth-child(1) { animation: fadeUp 0.4s 0.04s ease both; }
+    .step:nth-child(2) { animation: fadeUp 0.4s 0.08s ease both; }
+    .step:nth-child(3) { animation: fadeUp 0.4s 0.12s ease both; }
+    .step:nth-child(4) { animation: fadeUp 0.4s 0.16s ease both; }
+    .step:nth-child(5) { animation: fadeUp 0.4s 0.20s ease both; }
+    .step:nth-child(6) { animation: fadeUp 0.4s 0.24s ease both; }
+    .step:nth-child(7) { animation: fadeUp 0.4s 0.28s ease both; }
+    .step:nth-child(8) { animation: fadeUp 0.4s 0.32s ease both; }
   </style>
 </head>
 <body>
 
+  <!-- ══ HERO ══ -->
   <div class="hero">
     <p class="hero-eyebrow">An interactive explainer</p>
-    <h1>Base <em>64</em> Encoding</h1>
+    <h1>Base <em>64</em> Encoding Visualizer</h1>
     <p class="hero-sub">Step by step</p>
-    <div class="hero-rule"><span></span></div>
+    <div class="hero-ornament"><span></span></div>
   </div>
 
+  <!-- ══ STEPS ══ -->
   <div class="container">
-    <div class="steps-wrap">
 
-      <div class="step">
-        <div class="step-header">
-          <div class="step-num">1</div>
-          <div class="step-meta">
-            <div class="step-title">Text</div>
-            <div class="step-desc">Type any text to begin encoding</div>
-          </div>
+    <!-- 1 Input -->
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">1</div>
+        <div class="step-meta">
+          <div class="step-title">Text</div>
+          <div class="step-desc">Type any text to begin encoding</div>
         </div>
-        <div class="field-wrap">
-          <textarea id="input" rows="2" placeholder="e.g. Hello" autocomplete="off" spellcheck="false"></textarea>
+      </div>
+      <div class="field-wrap">
+        <textarea id="input" rows="1" placeholder="e.g. Hello" autocomplete="off" spellcheck="false"></textarea>
+        <button class="btn-copy" onclick="copyField('input',this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy
+        </button>
+      </div>
+    </div>
+
+    <!-- 2 Decimal -->
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">2</div>
+        <div class="step-meta">
+          <div class="step-title">Decimal / ASCII Bytes</div>
+          <div class="step-desc">Each character's ASCII decimal value</div>
+        </div>
+      </div>
+      <div class="field-wrap">
+        <div class="out-text" id="out-decimal"></div>
+        <button class="btn-copy" onclick="copyOut('out-decimal',this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy
+        </button>
+      </div>
+    </div>
+
+    <!-- 3 Binary -->
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">3</div>
+        <div class="step-meta">
+          <div class="step-title">Binary</div>
+          <div class="step-desc">Each decimal value in 8-bit binary</div>
+        </div>
+      </div>
+      <div class="field-wrap">
+        <div class="out-text" id="out-binary"></div>
+        <button class="btn-copy" onclick="copyOut('out-binary',this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy
+        </button>
+      </div>
+    </div>
+
+    <!-- 4 Combined -->
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">4</div>
+        <div class="step-meta">
+          <div class="step-title">Combined Binary</div>
+          <div class="step-desc">All 8-bit groups joined into one bitstream</div>
+        </div>
+      </div>
+      <div class="field-wrap">
+        <div class="out-text" id="out-combined"></div>
+        <button class="btn-copy" onclick="copyOut('out-combined',this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy
+        </button>
+      </div>
+    </div>
+
+    <!-- 5 Blocks -->
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">5</div>
+        <div class="step-meta">
+          <div class="step-title">Blocks of 6 Bits</div>
+          <div class="step-desc">Bitstream split into 6-bit chunks</div>
+        </div>
+      </div>
+      <div class="field-wrap">
+        <div class="out-text" id="out-blocks"></div>
+        <button class="btn-copy" onclick="copyOut('out-blocks',this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy
+        </button>
+      </div>
+    </div>
+
+    <!-- 6 Padded -->
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">6</div>
+        <div class="step-meta">
+          <div class="step-title">Ensuring Each Block Has 6 Bits</div>
+          <div class="step-desc">Trailing zeros <span style="color:var(--pad-color);background:var(--pad-bg);border-radius:3px;padding:0 4px;font-size:0.63rem;">highlighted</span> added to any short final block</div>
+        </div>
+      </div>
+      <div class="field-wrap">
+        <div class="out-text" id="out-padded-display"></div>
+        <button class="btn-copy" onclick="copyPlain('out-padded-plain',this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy
+        </button>
+      </div>
+      <input type="hidden" id="out-padded-plain" />
+    </div>
+
+    <!-- 7 Base64 decimals -->
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">7</div>
+        <div class="step-meta">
+          <div class="step-title">Base64 Bytes</div>
+          <div class="step-desc">Decimal value of each 6-bit block (0 – 63)</div>
+        </div>
+      </div>
+      <div class="field-wrap">
+        <div class="out-text" id="out-b64dec"></div>
+        <button class="btn-copy" onclick="copyOut('out-b64dec',this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy
+        </button>
+      </div>
+    </div>
+
+    <!-- 8 Final -->
+    <div class="step step--final">
+      <div class="step-header">
+        <div class="step-num">8</div>
+        <div class="step-meta">
+          <div class="step-title">Base64 Alphabet</div>
+          <div class="step-desc">Each decimal mapped to the Base64 character table, with = padding</div>
+        </div>
+      </div>
+      <div class="field-wrap">
+        <div class="out-text" id="out-b64"></div>
+        <button class="btn-copy" onclick="copyOut('out-b64',this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /container -->
+
+  <!-- ══ BOTTOM BAR ══ -->
+  <div class="bottom-bar">
+    <button class="bar-btn btn-clear" onclick="clearAll()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+      Clear
+    </button>
+    <button class="bar-btn btn-share" onclick="openShareModal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      Share Result
+    </button>
+  </div>
+
+  <!-- ══ TOAST ══ -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ══ SHARE MODAL ══ -->
+  <div class="share-overlay" id="share-overlay" onclick="handleOverlayClick(event)">
+    <div class="share-modal-wrap">
+
+      <!-- The card that gets captured -->
+      <div id="share-card">
+        <div class="sc-header">
+          <div class="sc-eyebrow">Base64 Encoding Visualizer</div>
+          <div class="sc-title">Base <em>64</em> Encoding</div>
+          <div class="sc-subtitle">Step by step result snapshot</div>
+        </div>
+        <div class="sc-body" id="sc-body">
+          <!-- rows injected by JS -->
+        </div>
+        <div class="sc-footer">
+          <div class="sc-watermark">base64.visualizer <span>· generated snapshot</span></div>
+          <button class="sc-try-btn" onclick="closeTryNow()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            Try now
+          </button>
         </div>
       </div>
 
-      <div class="step">
-        <div class="step-header">
-          <div class="step-num">2</div>
-          <div class="step-meta">
-            <div class="step-title">Decimal / ASCII Bytes</div>
-            <div class="step-desc">Each character's ASCII decimal value</div>
-          </div>
-        </div>
-        <div class="field-wrap">
-          <textarea id="out-decimal" rows="2" readonly placeholder="—"></textarea>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="step-header">
-          <div class="step-num">3</div>
-          <div class="step-meta">
-            <div class="step-title">Binary</div>
-            <div class="step-desc">Each decimal value in 8-bit binary</div>
-          </div>
-        </div>
-        <div class="field-wrap">
-          <textarea id="out-binary" rows="3" readonly placeholder="—"></textarea>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="step-header">
-          <div class="step-num">4</div>
-          <div class="step-meta">
-            <div class="step-title">Combined Binary</div>
-            <div class="step-desc">All 8-bit groups joined into one bitstream</div>
-          </div>
-        </div>
-        <div class="field-wrap">
-          <textarea id="out-combined" rows="2" readonly placeholder="—"></textarea>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="step-header">
-          <div class="step-num">5</div>
-          <div class="step-meta">
-            <div class="step-title">Blocks of 6 Bits</div>
-            <div class="step-desc">Bitstream split into 6-bit chunks</div>
-          </div>
-        </div>
-        <div class="field-wrap">
-          <textarea id="out-blocks" rows="2" readonly placeholder="—"></textarea>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="step-header">
-          <div class="step-num">6</div>
-          <div class="step-meta">
-            <div class="step-title">Ensuring Each Block Has 6 Bits</div>
-            <div class="step-desc">Trailing zeros appended to any short final block</div>
-          </div>
-        </div>
-        <div class="field-wrap">
-          <textarea id="out-padded" rows="2" readonly placeholder="—"></textarea>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="step-header">
-          <div class="step-num">7</div>
-          <div class="step-meta">
-            <div class="step-title">Base64 Bytes</div>
-            <div class="step-desc">Decimal value of each 6-bit block (0 – 63)</div>
-          </div>
-        </div>
-        <div class="field-wrap">
-          <textarea id="out-b64dec" rows="2" readonly placeholder="—"></textarea>
-        </div>
-      </div>
-
-      <div class="step step--final">
-        <div class="step-header">
-          <div class="step-num">8</div>
-          <div class="step-meta">
-            <div class="step-title">Base64 Alphabet</div>
-            <div class="step-desc">Each decimal mapped to the Base64 character table, with = padding</div>
-          </div>
-        </div>
-        <div class="field-wrap">
-          <textarea id="out-b64" rows="2" readonly placeholder="—"></textarea>
-        </div>
+      <!-- Modal action row (NOT part of screenshot) -->
+      <div class="share-actions" id="share-actions">
+        <button class="modal-btn modal-btn--close" onclick="closeShareModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          Close
+        </button>
+        <button class="modal-btn modal-btn--download" onclick="downloadCard()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download Image
+        </button>
       </div>
 
     </div>
-
-    <p class="footnote">Updates live as you type &nbsp;·&nbsp; <span>Base64</span> encoding visualizer</p>
   </div>
 
   <script>
     const B64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
+    /* ── state cache (plain text, for the card) ── */
+    const STATE = {
+      input: '', decimal: '', binary: '', combined: '',
+      blocks: '', paddedPlain: '', paddedRaw: [], paddedPadded: [],
+      b64dec: '', b64: ''
+    };
+
+    /* ══════════════════════════════════
+       TOAST
+    ══════════════════════════════════ */
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    }
+
+    /* ══════════════════════════════════
+       COPY HELPERS
+    ══════════════════════════════════ */
+    const COPY_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy`;
+    const CHECK_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Copied`;
+
+    function flashBtn(btn) {
+      const orig = btn.innerHTML;
+      btn.classList.add('copied');
+      btn.innerHTML = CHECK_SVG;
+      setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = orig; }, 1600);
+    }
+
+    function writeClip(text, btn) {
+      if (!text || !text.trim()) { showToast('Nothing to copy yet'); return; }
+      const go = () => { flashBtn(btn); showToast('Copied!'); };
+      navigator.clipboard ? navigator.clipboard.writeText(text).then(go).catch(() => fallbackCopy(text, btn)) : fallbackCopy(text, btn);
+    }
+    function fallbackCopy(text, btn) {
+      const ta = Object.assign(document.createElement('textarea'), { value: text });
+      ta.style.cssText = 'position:fixed;opacity:0';
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      flashBtn(btn); showToast('Copied!');
+    }
+    function copyField(id, btn) { writeClip(document.getElementById(id).value, btn); }
+    function copyOut(id, btn)   { writeClip(document.getElementById(id).textContent, btn); }
+    function copyPlain(id, btn) { writeClip(document.getElementById(id).value, btn); }
+
+    /* ══════════════════════════════════
+       CLEAR
+    ══════════════════════════════════ */
+    function clearAll() {
+      const inp = document.getElementById('input');
+      inp.value = ''; autoResize(inp); encode(''); showToast('Cleared');
+    }
+
+    /* ══════════════════════════════════
+       SHARE MODAL
+    ══════════════════════════════════ */
+    function openShareModal() {
+      if (!STATE.input.trim()) { showToast('Type some text first'); return; }
+      buildCard();
+      document.getElementById('share-overlay').classList.add('open');
+    }
+    function closeShareModal() {
+      document.getElementById('share-overlay').classList.remove('open');
+    }
+    function closeTryNow() {
+      closeShareModal();
+    }
+    function handleOverlayClick(e) {
+      if (e.target === document.getElementById('share-overlay')) closeShareModal();
+    }
+
+    /* Build the card rows from STATE */
+    function buildCard() {
+      const rows = [
+        { label: 'Input text',        value: STATE.input,      plain: true },
+        { label: 'ASCII Decimal',      value: STATE.decimal,    plain: true },
+        { label: 'Binary (8-bit)',     value: STATE.binary,     plain: true },
+        { label: 'Combined bits',      value: STATE.combined,   plain: true },
+        { label: '6-bit blocks',       value: STATE.blocks,     plain: true },
+        { label: 'Padded 6-bit',       value: null,             padded: true },
+        { label: 'Base64 decimals',    value: STATE.b64dec,     plain: true },
+        { label: 'Base64 result',      value: STATE.b64,        plain: true, final: true },
+      ];
+
+      const body = document.getElementById('sc-body');
+      body.innerHTML = '';
+
+      rows.forEach(row => {
+        const div = document.createElement('div');
+        div.className = 'sc-row' + (row.final ? ' sc-row--final' : '');
+
+        const lbl = document.createElement('div');
+        lbl.className = 'sc-label';
+        lbl.textContent = row.label;
+
+        const val = document.createElement('div');
+        val.className = 'sc-value';
+
+        if (row.padded) {
+          // render with highlighted zeros
+          STATE.paddedRaw.forEach((raw, i) => {
+            const full = STATE.paddedPadded[i];
+            if (i > 0) val.appendChild(document.createTextNode('   '));
+            val.appendChild(document.createTextNode(raw));
+            if (raw.length < 6) {
+              const sp = document.createElement('span');
+              sp.className = 'sc-pad-zero';
+              sp.textContent = full.slice(raw.length);
+              val.appendChild(sp);
+            }
+          });
+        } else {
+          val.textContent = row.value || '—';
+        }
+
+        div.appendChild(lbl);
+        div.appendChild(val);
+        body.appendChild(div);
+      });
+    }
+
+    /* Download card as PNG */
+    function downloadCard() {
+      const actions = document.getElementById('share-actions');
+      actions.style.visibility = 'hidden';
+
+      html2canvas(document.getElementById('share-card'), {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#ffffff',
+        logging: false
+      }).then(canvas => {
+        actions.style.visibility = '';
+        const link = document.createElement('a');
+        link.download = 'base64-result.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        showToast('Image downloaded!');
+      }).catch(() => {
+        actions.style.visibility = '';
+        showToast('Download failed');
+      });
+    }
+
+    /* ══════════════════════════════════
+       AUTO-RESIZE
+    ══════════════════════════════════ */
     function autoResize(el) {
       el.style.height = 'auto';
       el.style.height = el.scrollHeight + 'px';
     }
 
-    function set(id, val) {
-      const el = document.getElementById(id);
-      el.value = val;
-      autoResize(el);
-    }
-
+    /* ══════════════════════════════════
+       ENCODE
+    ══════════════════════════════════ */
     function encode(text) {
-      const ids = ['out-decimal','out-binary','out-combined','out-blocks','out-padded','out-b64dec','out-b64'];
-      if (!text) { ids.forEach(id => set(id, '')); return; }
+      STATE.input = text;
+      const ids = ['out-decimal','out-binary','out-combined','out-blocks','out-b64dec','out-b64'];
+      if (!text) {
+        ids.forEach(id => { document.getElementById(id).textContent = ''; });
+        document.getElementById('out-padded-display').innerHTML = '';
+        document.getElementById('out-padded-plain').value = '';
+        Object.assign(STATE, { decimal:'', binary:'', combined:'', blocks:'', paddedPlain:'', paddedRaw:[], paddedPadded:[], b64dec:'', b64:'' });
+        return;
+      }
 
       const decimals = [...text].map(c => c.charCodeAt(0));
-      set('out-decimal', decimals.join('   '));
+      STATE.decimal = decimals.join('   ');
+      document.getElementById('out-decimal').textContent = STATE.decimal;
 
       const binaries = decimals.map(d => d.toString(2).padStart(8, '0'));
-      set('out-binary', binaries.join('   '));
+      STATE.binary = binaries.join('   ');
+      document.getElementById('out-binary').textContent = STATE.binary;
 
       const combined = binaries.join('');
-      set('out-combined', combined);
+      STATE.combined = combined;
+      document.getElementById('out-combined').textContent = combined;
 
       const rawBlocks = combined.match(/.{1,6}/g) || [];
-      set('out-blocks', rawBlocks.join('   '));
+      STATE.blocks = rawBlocks.join('   ');
+      document.getElementById('out-blocks').textContent = STATE.blocks;
 
       const paddedBlocks = rawBlocks.map(b => b.padEnd(6, '0'));
-      set('out-padded', paddedBlocks.join('   '));
+      STATE.paddedRaw     = rawBlocks;
+      STATE.paddedPadded  = paddedBlocks;
+      STATE.paddedPlain   = paddedBlocks.join('   ');
+
+      const display = document.getElementById('out-padded-display');
+      display.innerHTML = '';
+      paddedBlocks.forEach((block, i) => {
+        const rawLen = rawBlocks[i].length;
+        if (i > 0) display.appendChild(document.createTextNode('   '));
+        display.appendChild(document.createTextNode(block.slice(0, rawLen)));
+        if (rawLen < 6) {
+          const sp = document.createElement('span');
+          sp.className = 'pad-zero';
+          sp.textContent = block.slice(rawLen);
+          display.appendChild(sp);
+        }
+      });
+      document.getElementById('out-padded-plain').value = STATE.paddedPlain;
 
       const b64Decimals = paddedBlocks.map(b => parseInt(b, 2));
-      set('out-b64dec', b64Decimals.join('   '));
+      STATE.b64dec = b64Decimals.join('   ');
+      document.getElementById('out-b64dec').textContent = STATE.b64dec;
 
       let b64 = b64Decimals.map(d => B64[d]).join('');
       while (b64.length % 4 !== 0) b64 += '=';
-      set('out-b64', b64);
+      STATE.b64 = b64;
+      document.getElementById('out-b64').textContent = b64;
     }
 
+    /* ══════════════════════════════════
+       INIT
+    ══════════════════════════════════ */
     const inputEl = document.getElementById('input');
     inputEl.addEventListener('input', () => { autoResize(inputEl); encode(inputEl.value); });
-    document.querySelectorAll('textarea').forEach(autoResize);
+    autoResize(inputEl);
   </script>
 </body>
 </html>
