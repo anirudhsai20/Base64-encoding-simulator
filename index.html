@@ -7,7 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
-    /* ── Palette ── */
     :root {
       --bg:          #fdfcfa;
       --cream:       #f7f2ea;
@@ -19,14 +18,14 @@
       --text:        #1c1714;
       --text-2:      #4a4038;
       --muted:       #9a8f84;
-      --accent:      #c97b4b;          /* warm amber/terracotta */
-      --accent-lt:   #fdf0e8;
+      --accent:      #c97b4b;
       --pad-color:   #9b3a22;
       --pad-bg:      #fdecea;
       --sans:        'Nunito', 'Segoe UI', sans-serif;
       --mono:        'JetBrains Mono', 'Courier New', monospace;
       --radius:      14px;
       --shadow:      0 1px 10px rgba(28,23,20,0.07);
+      --card-max:    960px;  /* wider cards */
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -36,56 +35,42 @@
       color: var(--text);
       font-family: var(--sans);
       min-height: 100vh;
-      padding-bottom: 110px;
+      padding-bottom: 90px;
     }
 
     /* ══════════════════════════════════
-       HERO
+       HERO — compact, no eyebrow
     ══════════════════════════════════ */
     .hero {
       text-align: center;
-      padding: 60px 24px 44px;
+      padding: 28px 24px 22px;
       border-bottom: 1px solid var(--border);
       background: var(--cream);
     }
-    .hero-eyebrow {
-      font-family: var(--mono);
-      font-size: 0.68rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 14px;
-    }
     .hero h1 {
-      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-size: clamp(1.5rem, 3.5vw, 2.2rem);
       font-weight: 700;
       color: var(--text);
-      line-height: 1.12;
-      letter-spacing: -0.025em;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
     }
     .hero h1 em { font-style: normal; color: var(--accent); }
     .hero-sub {
-      margin-top: 10px;
-      font-size: 0.95rem;
+      margin-top: 5px;
+      font-size: 0.82rem;
       font-weight: 300;
       color: var(--muted);
       letter-spacing: 0.06em;
     }
-    .hero-ornament {
-      display: flex; align-items: center; justify-content: center; gap: 10px;
-      margin-top: 28px;
-    }
-    .hero-ornament::before, .hero-ornament::after {
-      content: ''; width: 44px; height: 1px; background: var(--border-dk);
-    }
-    .hero-ornament span {
-      width: 5px; height: 5px; border-radius: 50%; background: var(--accent);
-    }
 
     /* ══════════════════════════════════
-       LAYOUT
+       LAYOUT — wider max-width, aligned with bar buttons
     ══════════════════════════════════ */
-    .container { max-width: 780px; margin: 0 auto; padding: 32px 24px 0; }
+    .container {
+      max-width: var(--card-max);
+      margin: 0 auto;
+      padding: 24px 24px 0;
+    }
 
     /* ══════════════════════════════════
        STEP CARDS
@@ -95,52 +80,54 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       overflow: hidden;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
     .step:focus-within {
       border-color: var(--accent);
-      box-shadow: 0 3px 18px rgba(201,123,75,0.14);
+      box-shadow: 0 3px 18px rgba(201,123,75,0.13);
     }
     .step-header {
       display: flex; align-items: center; gap: 12px;
-      padding: 13px 18px;
+      padding: 11px 18px;
       background: var(--cream);
       border-bottom: 1px solid var(--border);
     }
     .step-num {
-      width: 26px; height: 26px; border-radius: 7px;
+      width: 24px; height: 24px; border-radius: 6px;
       background: var(--text); color: #fff;
-      font-family: var(--mono); font-size: 0.68rem; font-weight: 500;
+      font-family: var(--mono); font-size: 0.65rem; font-weight: 500;
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
     }
     .step-meta { flex: 1; min-width: 0; }
-    .step-title { font-size: 0.92rem; font-weight: 700; color: var(--text); }
+    .step-title { font-size: 0.88rem; font-weight: 700; color: var(--text); }
     .step-desc  {
-      font-size: 0.68rem; color: var(--muted); margin-top: 2px;
+      font-size: 0.65rem; color: var(--muted); margin-top: 1px;
       font-family: var(--mono);
     }
 
     /* ── Field row ── */
     .field-wrap {
-      display: flex; align-items: flex-start; gap: 10px;
-      padding: 12px 16px 14px;
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 14px 18px 16px;
     }
 
+    /* Input textarea */
     textarea#input {
       flex: 1; background: transparent; border: none; outline: none;
-      font-family: var(--sans); font-size: 1rem; font-weight: 600;
+      font-family: var(--sans); font-size: 1.1rem; font-weight: 600;
       color: var(--text); resize: none; line-height: 1.7;
-      caret-color: var(--accent); overflow: hidden; min-height: 40px;
+      caret-color: var(--accent); overflow: hidden; min-height: 38px;
     }
     textarea#input::placeholder { color: var(--border-dk); font-weight: 400; }
 
+    /* Output div */
     .out-text {
-      flex: 1; font-family: var(--mono); font-size: 0.86rem;
-      color: var(--text-2); line-height: 1.9; word-break: break-all;
-      min-height: 36px; user-select: text;
+      flex: 1; font-family: var(--mono); font-size: 1rem;
+      color: var(--text-2); line-height: 1.85; word-break: break-all;
+      min-height: 34px; user-select: text;
     }
     .out-text:empty::before { content: '—'; color: var(--border-dk); font-style: italic; }
 
@@ -150,15 +137,15 @@
     }
 
     .step--final .out-text {
-      color: var(--text); font-weight: 700; font-size: 0.95rem;
+      color: var(--text); font-weight: 700; font-size: 1.1rem;
     }
 
     /* ── Copy btn ── */
     .btn-copy {
       flex-shrink: 0; margin-top: 3px;
       background: var(--cream); border: 1px solid var(--border-dk);
-      border-radius: 7px; padding: 4px 10px;
-      font-family: var(--mono); font-size: 0.66rem; color: var(--text-2);
+      border-radius: 7px; padding: 5px 11px;
+      font-family: var(--mono); font-size: 0.68rem; color: var(--text-2);
       cursor: pointer; display: flex; align-items: center; gap: 5px;
       transition: background 0.15s, color 0.15s, border-color 0.15s;
       white-space: nowrap; user-select: none;
@@ -168,16 +155,24 @@
     .btn-copy svg { width: 12px; height: 12px; flex-shrink: 0; }
 
     /* ══════════════════════════════════
-       BOTTOM BAR
+       BOTTOM BAR — edges aligned to cards
     ══════════════════════════════════ */
     .bottom-bar {
       position: fixed; bottom: 0; left: 0; right: 0;
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 12px 32px;
-      background: rgba(253,252,250,0.92);
+      display: flex; justify-content: center; align-items: center;
+      background: rgba(253,252,250,0.94);
       backdrop-filter: blur(16px);
       border-top: 1px solid var(--border);
       z-index: 100;
+    }
+    /* inner wrapper matches card max-width */
+    .bottom-bar-inner {
+      width: 100%;
+      max-width: var(--card-max);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 24px;   /* same horizontal padding as .container */
     }
     .bar-btn {
       display: flex; align-items: center; gap: 7px;
@@ -203,7 +198,7 @@
        TOAST
     ══════════════════════════════════ */
     .toast {
-      position: fixed; bottom: 74px; left: 50%;
+      position: fixed; bottom: 70px; left: 50%;
       transform: translateX(-50%) translateY(8px);
       background: var(--text); color: #fff;
       font-family: var(--sans); font-size: 0.78rem; font-weight: 600;
@@ -215,7 +210,7 @@
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
     /* ══════════════════════════════════
-       SHARE MODAL OVERLAY
+       SHARE MODAL
     ══════════════════════════════════ */
     .share-overlay {
       position: fixed; inset: 0;
@@ -228,13 +223,12 @@
     }
     .share-overlay.open { opacity: 1; pointer-events: all; }
 
-    /* inner wrapper: the card + download btn below it */
     .share-modal-wrap {
       display: flex; flex-direction: column; align-items: center; gap: 14px;
-      max-width: 600px; width: 100%;
+      max-width: 580px; width: 100%;
     }
 
-    /* ── The card that gets screenshot ── */
+    /* ── The card ── */
     #share-card {
       width: 100%;
       background: #ffffff;
@@ -243,77 +237,65 @@
       box-shadow: 0 8px 40px rgba(28,23,20,0.22);
       font-family: 'Nunito', sans-serif;
     }
-
-    /* card header */
     .sc-header {
       background: var(--cream);
-      padding: 22px 24px 18px;
+      padding: 20px 24px 16px;
       border-bottom: 1px solid var(--border);
     }
     .sc-eyebrow {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.6rem; letter-spacing: 0.28em;
+      font-size: 0.58rem; letter-spacing: 0.28em;
       text-transform: uppercase; color: var(--accent);
-      margin-bottom: 6px;
+      margin-bottom: 5px;
     }
     .sc-title {
-      font-size: 1.3rem; font-weight: 700;
-      color: var(--text); line-height: 1.2;
+      font-size: 1.2rem; font-weight: 700; color: var(--text); line-height: 1.2;
     }
     .sc-title em { font-style: normal; color: var(--accent); }
     .sc-subtitle {
-      font-size: 0.75rem; color: var(--muted);
-      font-weight: 300; margin-top: 3px;
+      font-size: 0.72rem; color: var(--muted); font-weight: 300; margin-top: 2px;
     }
-
-    /* card body — the rows */
-    .sc-body { padding: 16px 24px 0; }
+    .sc-body { padding: 14px 24px 0; }
     .sc-row {
       display: flex; align-items: baseline; gap: 10px;
-      padding: 9px 0;
-      border-bottom: 1px solid var(--border);
+      padding: 8px 0; border-bottom: 1px solid var(--border);
     }
     .sc-row:last-child { border-bottom: none; }
     .sc-label {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.6rem; font-weight: 500;
+      font-size: 0.58rem; font-weight: 500;
       color: var(--muted); text-transform: uppercase;
-      letter-spacing: 0.08em; min-width: 110px; flex-shrink: 0;
+      letter-spacing: 0.08em; min-width: 108px; flex-shrink: 0;
     }
     .sc-value {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem; color: var(--text-2);
-      word-break: break-all; line-height: 1.65;
-      flex: 1;
+      font-size: 0.7rem; color: var(--text-2);
+      word-break: break-all; line-height: 1.6; flex: 1;
     }
     .sc-row--final .sc-value {
-      font-size: 0.9rem; font-weight: 700; color: var(--text);
+      font-size: 0.88rem; font-weight: 700; color: var(--text);
     }
     .sc-pad-zero {
       color: var(--pad-color); background: var(--pad-bg);
       border-radius: 3px; padding: 0 2px;
     }
-
-    /* card footer */
     .sc-footer {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 24px 18px;
+      padding: 13px 24px 16px;
       background: var(--peach);
     }
     .sc-watermark {
-      font-size: 0.7rem; font-weight: 600; color: var(--accent);
+      font-size: 0.68rem; font-weight: 600; color: var(--accent);
       letter-spacing: 0.04em;
     }
     .sc-watermark span { color: var(--muted); font-weight: 400; }
     .sc-try-btn {
       background: var(--text); color: #fff;
-      border: none; border-radius: 8px;
-      padding: 7px 16px;
-      font-family: 'Nunito', sans-serif; font-size: 0.78rem; font-weight: 700;
-      cursor: pointer; letter-spacing: 0.02em;
-      display: flex; align-items: center; gap: 6px;
+      border: none; border-radius: 8px; padding: 7px 16px;
+      font-family: 'Nunito', sans-serif; font-size: 0.76rem; font-weight: 700;
+      cursor: pointer; display: flex; align-items: center; gap: 5px;
     }
-    .sc-try-btn svg { width: 13px; height: 13px; }
+    .sc-try-btn svg { width: 12px; height: 12px; }
 
     /* modal action row */
     .share-actions {
@@ -327,13 +309,11 @@
     }
     .modal-btn svg { width: 15px; height: 15px; }
     .modal-btn--close {
-      background: rgba(255,255,255,0.85); color: var(--text-2);
+      background: rgba(255,255,255,0.9); color: var(--text-2);
       border: 1px solid var(--border-dk);
     }
     .modal-btn--close:hover { background: var(--text); color: #fff; }
-    .modal-btn--download {
-      background: var(--text); color: #fff;
-    }
+    .modal-btn--download { background: var(--text); color: #fff; }
     .modal-btn--download:hover { background: var(--accent); }
 
     /* ── Animations ── */
@@ -341,25 +321,23 @@
       from { opacity:0; transform: translateY(10px); }
       to   { opacity:1; transform: translateY(0); }
     }
-    .hero  { animation: fadeUp 0.4s ease both; }
-    .step:nth-child(1) { animation: fadeUp 0.4s 0.04s ease both; }
-    .step:nth-child(2) { animation: fadeUp 0.4s 0.08s ease both; }
-    .step:nth-child(3) { animation: fadeUp 0.4s 0.12s ease both; }
-    .step:nth-child(4) { animation: fadeUp 0.4s 0.16s ease both; }
-    .step:nth-child(5) { animation: fadeUp 0.4s 0.20s ease both; }
-    .step:nth-child(6) { animation: fadeUp 0.4s 0.24s ease both; }
-    .step:nth-child(7) { animation: fadeUp 0.4s 0.28s ease both; }
-    .step:nth-child(8) { animation: fadeUp 0.4s 0.32s ease both; }
+    .hero { animation: fadeUp 0.35s ease both; }
+    .step:nth-child(1) { animation: fadeUp 0.35s 0.03s ease both; }
+    .step:nth-child(2) { animation: fadeUp 0.35s 0.06s ease both; }
+    .step:nth-child(3) { animation: fadeUp 0.35s 0.09s ease both; }
+    .step:nth-child(4) { animation: fadeUp 0.35s 0.12s ease both; }
+    .step:nth-child(5) { animation: fadeUp 0.35s 0.15s ease both; }
+    .step:nth-child(6) { animation: fadeUp 0.35s 0.18s ease both; }
+    .step:nth-child(7) { animation: fadeUp 0.35s 0.21s ease both; }
+    .step:nth-child(8) { animation: fadeUp 0.35s 0.24s ease both; }
   </style>
 </head>
 <body>
 
-  <!-- ══ HERO ══ -->
+  <!-- ══ HERO — compact, no eyebrow ══ -->
   <div class="hero">
-    <p class="hero-eyebrow">An interactive explainer</p>
     <h1>Base <em>64</em> Encoding Visualizer</h1>
     <p class="hero-sub">Step by step</p>
-    <div class="hero-ornament"><span></span></div>
   </div>
 
   <!-- ══ STEPS ══ -->
@@ -456,7 +434,7 @@
         <div class="step-num">6</div>
         <div class="step-meta">
           <div class="step-title">Ensuring Each Block Has 6 Bits</div>
-          <div class="step-desc">Trailing zeros <span style="color:var(--pad-color);background:var(--pad-bg);border-radius:3px;padding:0 4px;font-size:0.63rem;">highlighted</span> added to any short final block</div>
+          <div class="step-desc">Trailing zeros <span style="color:var(--pad-color);background:var(--pad-bg);border-radius:3px;padding:0 4px;font-size:0.62rem;">highlighted</span> added to any short final block</div>
         </div>
       </div>
       <div class="field-wrap">
@@ -504,16 +482,18 @@
 
   </div><!-- /container -->
 
-  <!-- ══ BOTTOM BAR ══ -->
+  <!-- ══ BOTTOM BAR — inner width aligns with cards ══ -->
   <div class="bottom-bar">
-    <button class="bar-btn btn-clear" onclick="clearAll()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-      Clear
-    </button>
-    <button class="bar-btn btn-share" onclick="openShareModal()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-      Share Result
-    </button>
+    <div class="bottom-bar-inner">
+      <button class="bar-btn btn-clear" onclick="clearAll()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+        Clear
+      </button>
+      <button class="bar-btn btn-share" onclick="shareResult()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Share Result
+      </button>
+    </div>
   </div>
 
   <!-- ══ TOAST ══ -->
@@ -530,19 +510,17 @@
           <div class="sc-title">Base <em>64</em> Encoding</div>
           <div class="sc-subtitle">Step by step result snapshot</div>
         </div>
-        <div class="sc-body" id="sc-body">
-          <!-- rows injected by JS -->
-        </div>
+        <div class="sc-body" id="sc-body"></div>
         <div class="sc-footer">
           <div class="sc-watermark">base64.visualizer <span>· generated snapshot</span></div>
-          <button class="sc-try-btn" onclick="closeTryNow()">
+          <button class="sc-try-btn" onclick="closeShareModal()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
             Try now
           </button>
         </div>
       </div>
 
-      <!-- Modal action row (NOT part of screenshot) -->
+      <!-- Modal actions (hidden during screenshot) -->
       <div class="share-actions" id="share-actions">
         <button class="modal-btn modal-btn--close" onclick="closeShareModal()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -560,16 +538,13 @@
   <script>
     const B64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
-    /* ── state cache (plain text, for the card) ── */
     const STATE = {
       input: '', decimal: '', binary: '', combined: '',
       blocks: '', paddedPlain: '', paddedRaw: [], paddedPadded: [],
       b64dec: '', b64: ''
     };
 
-    /* ══════════════════════════════════
-       TOAST
-    ══════════════════════════════════ */
+    /* ── Toast ── */
     function showToast(msg) {
       const t = document.getElementById('toast');
       t.textContent = msg;
@@ -577,23 +552,21 @@
       setTimeout(() => t.classList.remove('show'), 2000);
     }
 
-    /* ══════════════════════════════════
-       COPY HELPERS
-    ══════════════════════════════════ */
-    const COPY_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy`;
+    /* ── Copy helpers ── */
+    const COPY_SVG  = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy`;
     const CHECK_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Copied`;
 
     function flashBtn(btn) {
       const orig = btn.innerHTML;
-      btn.classList.add('copied');
-      btn.innerHTML = CHECK_SVG;
+      btn.classList.add('copied'); btn.innerHTML = CHECK_SVG;
       setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = orig; }, 1600);
     }
-
     function writeClip(text, btn) {
       if (!text || !text.trim()) { showToast('Nothing to copy yet'); return; }
       const go = () => { flashBtn(btn); showToast('Copied!'); };
-      navigator.clipboard ? navigator.clipboard.writeText(text).then(go).catch(() => fallbackCopy(text, btn)) : fallbackCopy(text, btn);
+      navigator.clipboard
+        ? navigator.clipboard.writeText(text).then(go).catch(() => fallbackCopy(text, btn))
+        : fallbackCopy(text, btn);
     }
     function fallbackCopy(text, btn) {
       const ta = Object.assign(document.createElement('textarea'), { value: text });
@@ -605,43 +578,61 @@
     function copyOut(id, btn)   { writeClip(document.getElementById(id).textContent, btn); }
     function copyPlain(id, btn) { writeClip(document.getElementById(id).value, btn); }
 
-    /* ══════════════════════════════════
-       CLEAR
-    ══════════════════════════════════ */
+    /* ── Clear ── */
     function clearAll() {
       const inp = document.getElementById('input');
       inp.value = ''; autoResize(inp); encode(''); showToast('Cleared');
     }
 
     /* ══════════════════════════════════
-       SHARE MODAL
+       SHARE — native device share sheet,
+       falls back to showing the card modal
     ══════════════════════════════════ */
-    function openShareModal() {
+    function shareResult() {
       if (!STATE.input.trim()) { showToast('Type some text first'); return; }
+
+      /* Try device native share sheet first */
+      if (navigator.share) {
+        navigator.share({
+          title: 'Base64 Encoding Visualizer',
+          text:
+            `Base64 Encoding Visualizer\n` +
+            `─────────────────────────\n` +
+            `Input:    ${STATE.input}\n` +
+            `Decimal:  ${STATE.decimal}\n` +
+            `Binary:   ${STATE.binary}\n` +
+            `Combined: ${STATE.combined}\n` +
+            `6-blocks: ${STATE.blocks}\n` +
+            `Padded:   ${STATE.paddedPlain}\n` +
+            `B64 dec:  ${STATE.b64dec}\n` +
+            `Base64:   ${STATE.b64}`
+        }).catch(() => {}); /* user cancelled — silently ignore */
+        return;
+      }
+
+      /* Fallback: show the card modal with download option */
       buildCard();
       document.getElementById('share-overlay').classList.add('open');
     }
+
     function closeShareModal() {
       document.getElementById('share-overlay').classList.remove('open');
-    }
-    function closeTryNow() {
-      closeShareModal();
     }
     function handleOverlayClick(e) {
       if (e.target === document.getElementById('share-overlay')) closeShareModal();
     }
 
-    /* Build the card rows from STATE */
+    /* ── Build share card rows ── */
     function buildCard() {
       const rows = [
-        { label: 'Input text',        value: STATE.input,      plain: true },
-        { label: 'ASCII Decimal',      value: STATE.decimal,    plain: true },
-        { label: 'Binary (8-bit)',     value: STATE.binary,     plain: true },
-        { label: 'Combined bits',      value: STATE.combined,   plain: true },
-        { label: '6-bit blocks',       value: STATE.blocks,     plain: true },
-        { label: 'Padded 6-bit',       value: null,             padded: true },
-        { label: 'Base64 decimals',    value: STATE.b64dec,     plain: true },
-        { label: 'Base64 result',      value: STATE.b64,        plain: true, final: true },
+        { label: 'Input text',     value: STATE.input,       plain: true },
+        { label: 'ASCII Decimal',  value: STATE.decimal,     plain: true },
+        { label: 'Binary (8-bit)', value: STATE.binary,      plain: true },
+        { label: 'Combined bits',  value: STATE.combined,    plain: true },
+        { label: '6-bit blocks',   value: STATE.blocks,      plain: true },
+        { label: 'Padded 6-bit',   value: null,              padded: true },
+        { label: 'Base64 decimals',value: STATE.b64dec,      plain: true },
+        { label: 'Base64 result',  value: STATE.b64,         plain: true, final: true },
       ];
 
       const body = document.getElementById('sc-body');
@@ -659,7 +650,6 @@
         val.className = 'sc-value';
 
         if (row.padded) {
-          // render with highlighted zeros
           STATE.paddedRaw.forEach((raw, i) => {
             const full = STATE.paddedPadded[i];
             if (i > 0) val.appendChild(document.createTextNode('   '));
@@ -675,22 +665,17 @@
           val.textContent = row.value || '—';
         }
 
-        div.appendChild(lbl);
-        div.appendChild(val);
+        div.appendChild(lbl); div.appendChild(val);
         body.appendChild(div);
       });
     }
 
-    /* Download card as PNG */
+    /* ── Download card as PNG ── */
     function downloadCard() {
       const actions = document.getElementById('share-actions');
       actions.style.visibility = 'hidden';
-
       html2canvas(document.getElementById('share-card'), {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: '#ffffff',
-        logging: false
+        scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false
       }).then(canvas => {
         actions.style.visibility = '';
         const link = document.createElement('a');
@@ -698,15 +683,10 @@
         link.href = canvas.toDataURL('image/png');
         link.click();
         showToast('Image downloaded!');
-      }).catch(() => {
-        actions.style.visibility = '';
-        showToast('Download failed');
-      });
+      }).catch(() => { actions.style.visibility = ''; showToast('Download failed'); });
     }
 
-    /* ══════════════════════════════════
-       AUTO-RESIZE
-    ══════════════════════════════════ */
+    /* ── Auto-resize ── */
     function autoResize(el) {
       el.style.height = 'auto';
       el.style.height = el.scrollHeight + 'px';
@@ -743,9 +723,9 @@
       document.getElementById('out-blocks').textContent = STATE.blocks;
 
       const paddedBlocks = rawBlocks.map(b => b.padEnd(6, '0'));
-      STATE.paddedRaw     = rawBlocks;
-      STATE.paddedPadded  = paddedBlocks;
-      STATE.paddedPlain   = paddedBlocks.join('   ');
+      STATE.paddedRaw    = rawBlocks;
+      STATE.paddedPadded = paddedBlocks;
+      STATE.paddedPlain  = paddedBlocks.join('   ');
 
       const display = document.getElementById('out-padded-display');
       display.innerHTML = '';
@@ -772,9 +752,7 @@
       document.getElementById('out-b64').textContent = b64;
     }
 
-    /* ══════════════════════════════════
-       INIT
-    ══════════════════════════════════ */
+    /* ── Init ── */
     const inputEl = document.getElementById('input');
     inputEl.addEventListener('input', () => { autoResize(inputEl); encode(inputEl.value); });
     autoResize(inputEl);
