@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Base64 Encoding Visualizer</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     :root {
@@ -19,13 +19,17 @@
       --text-2:      #4a4038;
       --muted:       #9a8f84;
       --accent:      #c97b4b;
-      --pad-color:   #9b3a22;
-      --pad-bg:      #fdecea;
+
+      /* Changed: pad color from red to a soft teal/blue */
+      --pad-color:   #2a7a6e;
+      --pad-bg:      #e4f5f2;
+
       --sans:        'Nunito', 'Segoe UI', sans-serif;
       --mono:        'JetBrains Mono', 'Courier New', monospace;
+      --serif:       'DM Serif Display', Georgia, serif;
       --radius:      14px;
       --shadow:      0 1px 10px rgba(28,23,20,0.07);
-      --card-max:    960px;  /* wider cards */
+      --card-max:    960px;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -39,7 +43,7 @@
     }
 
     /* ══════════════════════════════════
-       HERO — compact, no eyebrow
+       HERO
     ══════════════════════════════════ */
     .hero {
       text-align: center;
@@ -64,7 +68,7 @@
     }
 
     /* ══════════════════════════════════
-       LAYOUT — wider max-width, aligned with bar buttons
+       LAYOUT
     ══════════════════════════════════ */
     .container {
       max-width: var(--card-max);
@@ -73,14 +77,14 @@
     }
 
     /* ══════════════════════════════════
-       STEP CARDS
+       STEP CARDS — slightly more gap
     ══════════════════════════════════ */
     .step {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      margin-bottom: 14px;
+      margin-bottom: 20px; /* increased from 14px */
       overflow: hidden;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
@@ -136,8 +140,14 @@
       border-radius: 3px; padding: 0 2px; font-weight: 500;
     }
 
+    /* Step 8 — Base64 Alphabet uses serif display font */
     .step--final .out-text {
-      color: var(--text); font-weight: 700; font-size: 1.1rem;
+      color: var(--text);
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      line-height: 1.6;
     }
 
     /* ── Copy btn ── */
@@ -155,7 +165,7 @@
     .btn-copy svg { width: 12px; height: 12px; flex-shrink: 0; }
 
     /* ══════════════════════════════════
-       BOTTOM BAR — edges aligned to cards
+       BOTTOM BAR
     ══════════════════════════════════ */
     .bottom-bar {
       position: fixed; bottom: 0; left: 0; right: 0;
@@ -165,14 +175,13 @@
       border-top: 1px solid var(--border);
       z-index: 100;
     }
-    /* inner wrapper matches card max-width */
     .bottom-bar-inner {
       width: 100%;
       max-width: var(--card-max);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 24px;   /* same horizontal padding as .container */
+      padding: 12px 24px;
     }
     .bar-btn {
       display: flex; align-items: center; gap: 7px;
@@ -188,6 +197,16 @@
       background: var(--cream); color: var(--text-2); border-color: var(--border-dk);
     }
     .btn-clear:hover { background: var(--text); color: #fff; border-color: var(--text); }
+
+    /* Right-side button group */
+    .bar-btn-group {
+      display: flex; gap: 10px; align-items: center;
+    }
+
+    .btn-feedback {
+      background: var(--text); color: #fff; border-color: var(--text);
+    }
+    .btn-feedback:hover { background: var(--accent); border-color: var(--accent); }
 
     .btn-share {
       background: var(--text); color: #fff; border-color: var(--text);
@@ -228,7 +247,6 @@
       max-width: 580px; width: 100%;
     }
 
-    /* ── The card ── */
     #share-card {
       width: 100%;
       background: #ffffff;
@@ -273,7 +291,9 @@
       word-break: break-all; line-height: 1.6; flex: 1;
     }
     .sc-row--final .sc-value {
-      font-size: 0.88rem; font-weight: 700; color: var(--text);
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 1rem; font-weight: 400; color: var(--text);
+      letter-spacing: 0.04em;
     }
     .sc-pad-zero {
       color: var(--pad-color); background: var(--pad-bg);
@@ -297,7 +317,6 @@
     }
     .sc-try-btn svg { width: 12px; height: 12px; }
 
-    /* modal action row */
     .share-actions {
       display: flex; gap: 10px; width: 100%; justify-content: flex-end;
     }
@@ -334,7 +353,7 @@
 </head>
 <body>
 
-  <!-- ══ HERO — compact, no eyebrow ══ -->
+  <!-- ══ HERO ══ -->
   <div class="hero">
     <h1>Base <em>64</em> Encoding Visualizer</h1>
     <p class="hero-sub">Step by step</p>
@@ -482,17 +501,23 @@
 
   </div><!-- /container -->
 
-  <!-- ══ BOTTOM BAR — inner width aligns with cards ══ -->
+  <!-- ══ BOTTOM BAR ══ -->
   <div class="bottom-bar">
     <div class="bottom-bar-inner">
       <button class="bar-btn btn-clear" onclick="clearAll()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
         Clear
       </button>
-      <button class="bar-btn btn-share" onclick="shareResult()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-        Share Result
-      </button>
+      <div class="bar-btn-group">
+        <button class="bar-btn btn-feedback" onclick="openFeedback()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Give Feedback
+        </button>
+        <button class="bar-btn btn-share" onclick="shareResult()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          Share Result
+        </button>
+      </div>
     </div>
   </div>
 
@@ -502,8 +527,6 @@
   <!-- ══ SHARE MODAL ══ -->
   <div class="share-overlay" id="share-overlay" onclick="handleOverlayClick(event)">
     <div class="share-modal-wrap">
-
-      <!-- The card that gets captured -->
       <div id="share-card">
         <div class="sc-header">
           <div class="sc-eyebrow">Base64 Encoding Visualizer</div>
@@ -519,8 +542,6 @@
           </button>
         </div>
       </div>
-
-      <!-- Modal actions (hidden during screenshot) -->
       <div class="share-actions" id="share-actions">
         <button class="modal-btn modal-btn--close" onclick="closeShareModal()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -531,7 +552,6 @@
           Download Image
         </button>
       </div>
-
     </div>
   </div>
 
@@ -543,6 +563,11 @@
       blocks: '', paddedPlain: '', paddedRaw: [], paddedPadded: [],
       b64dec: '', b64: ''
     };
+
+    /* ── Feedback ── */
+    function openFeedback() {
+      window.open('https://docs.google.com/forms/d/e/1FAIpQLSeKOM4cOvF7tSB6YHI3vu4DONYaTkaJQjrE_Mulc9IB0-0giA/viewform?usp=publish-editor', '_blank');
+    }
 
     /* ── Toast ── */
     function showToast(msg) {
@@ -584,14 +609,9 @@
       inp.value = ''; autoResize(inp); encode(''); showToast('Cleared');
     }
 
-    /* ══════════════════════════════════
-       SHARE — native device share sheet,
-       falls back to showing the card modal
-    ══════════════════════════════════ */
+    /* ── Share ── */
     function shareResult() {
       if (!STATE.input.trim()) { showToast('Type some text first'); return; }
-
-      /* Try device native share sheet first */
       if (navigator.share) {
         navigator.share({
           title: 'Base64 Encoding Visualizer',
@@ -606,11 +626,9 @@
             `Padded:   ${STATE.paddedPlain}\n` +
             `B64 dec:  ${STATE.b64dec}\n` +
             `Base64:   ${STATE.b64}`
-        }).catch(() => {}); /* user cancelled — silently ignore */
+        }).catch(() => {});
         return;
       }
-
-      /* Fallback: show the card modal with download option */
       buildCard();
       document.getElementById('share-overlay').classList.add('open');
     }
@@ -622,7 +640,6 @@
       if (e.target === document.getElementById('share-overlay')) closeShareModal();
     }
 
-    /* ── Build share card rows ── */
     function buildCard() {
       const rows = [
         { label: 'Input text',     value: STATE.input,       plain: true },
@@ -634,21 +651,16 @@
         { label: 'Base64 decimals',value: STATE.b64dec,      plain: true },
         { label: 'Base64 result',  value: STATE.b64,         plain: true, final: true },
       ];
-
       const body = document.getElementById('sc-body');
       body.innerHTML = '';
-
       rows.forEach(row => {
         const div = document.createElement('div');
         div.className = 'sc-row' + (row.final ? ' sc-row--final' : '');
-
         const lbl = document.createElement('div');
         lbl.className = 'sc-label';
         lbl.textContent = row.label;
-
         const val = document.createElement('div');
         val.className = 'sc-value';
-
         if (row.padded) {
           STATE.paddedRaw.forEach((raw, i) => {
             const full = STATE.paddedPadded[i];
@@ -664,13 +676,11 @@
         } else {
           val.textContent = row.value || '—';
         }
-
         div.appendChild(lbl); div.appendChild(val);
         body.appendChild(div);
       });
     }
 
-    /* ── Download card as PNG ── */
     function downloadCard() {
       const actions = document.getElementById('share-actions');
       actions.style.visibility = 'hidden';
@@ -692,9 +702,7 @@
       el.style.height = el.scrollHeight + 'px';
     }
 
-    /* ══════════════════════════════════
-       ENCODE
-    ══════════════════════════════════ */
+    /* ── Encode ── */
     function encode(text) {
       STATE.input = text;
       const ids = ['out-decimal','out-binary','out-combined','out-blocks','out-b64dec','out-b64'];
@@ -705,7 +713,6 @@
         Object.assign(STATE, { decimal:'', binary:'', combined:'', blocks:'', paddedPlain:'', paddedRaw:[], paddedPadded:[], b64dec:'', b64:'' });
         return;
       }
-
       const decimals = [...text].map(c => c.charCodeAt(0));
       STATE.decimal = decimals.join('   ');
       document.getElementById('out-decimal').textContent = STATE.decimal;
